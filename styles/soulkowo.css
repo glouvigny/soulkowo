@@ -1,0 +1,12 @@
+body {
+    padding: 16px;
+}
+
+#notice {
+    position: fixed;
+    bottom: 0px;
+    left: 5px;
+    right: 5px;
+    opacity: .75 !important;
+    z-index: 1337;
+}

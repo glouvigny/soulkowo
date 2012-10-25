@@ -1,0 +1,26 @@
+{
+  "name": "SoulKowo",
+    "description": "A NetSoul client for Chrome/Chrome OS.",
+    "version": "0.5",
+    "app": {
+        "background": {
+            "persistent": true,
+            "scripts": [
+                "scripts/std.js",
+                "scripts/tcp-client.js",
+                "scripts/background.js"
+            ]
+        }
+    },
+    "offline_enabled": true,
+    "permissions": [
+        {
+            "socket": [
+                "tcp-connect:ns-server.epita.fr:4242"
+            ]
+        },
+        "background",
+        "storage"
+    ],
+    "manifest_version": 2
+}

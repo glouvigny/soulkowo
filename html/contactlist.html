@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SoulKowo - Contact list</title>
+    <meta charset="UTF-8"/>
+    <script src="../scripts/std.js" async></script>
+    <script src="../scripts/ui.chrome.js" async></script>
+    <link href="../styles/bootstrap.css" rel="stylesheet"/>
+    <link href="../styles/soulkowo.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="notice" class="alert hide">
+    <span id="notice-dismiss" class="close">×</span>
+    <span id="notice-msg">Sample shit</span>
+</div>
+<div id="contents">
+<form class="container" id="login-form">
+  <legend>SoulKowo - Login</legend>
+    <div>
+      <input type="text" id="login-login" placeholder="Login">
+    </div>
+    <div>
+      <input type="password" id="login-password" placeholder="Password">
+    </div>
+    <div>
+      <label class="checkbox">
+        <input id="login-remember" type="checkbox"> Remember me
+      </label>
+      <button id="login-connect" class="btn btn-primary pull-left">Sign in</button>
+    </div>
+  </div>
+</form>
+<div class="container hide" id="contact-list">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <ul class="nav">
+              <li><a href="#" id="add-contact"><i class="icon-book"></i> Add contact</a></li>
+              <li><a href="#" id="disconnect"><i class="icon-remove-sign"></i> Log out</a></li>
+            </ul>
+        </div>
+    </div>
+    <ul id="contact-list">
+        <li class="" id="contact-placeholder">
+            <span id="contact-placeholder-status">O</span> - <span id="contact-placeholder-login">exampl_e</span>
+        </li>
+    </ul>
+</div>
+</div>
+</body>
+</html>
