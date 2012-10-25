@@ -19,7 +19,7 @@ Features
 * (x) Run at startup
 * (x) Connection
 * (x) Autologin
-* ( ) Autoreconnect
+* (x) Autoreconnect
 * ( ) Friendlist
 * ( ) Sending messages
 * ( ) Receiving messages

@@ -9,4 +9,17 @@ body {
     right: 5px;
     opacity: .75 !important;
     z-index: 1337;
+
+    -webkit-transition-property: opacity; 
+    -webkit-transition-duration: 0.25s; 
+    -webkit-transition-timing-function:ease-out;
+}
+
+#notice.smooth-hide {
+    opacity: 0 !important;
+}
+
+#login-form input[type=text], #login-form input[type=password] {
+    left: 5px;
+    right: 5px;
 }

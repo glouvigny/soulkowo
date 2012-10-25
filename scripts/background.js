@@ -19,6 +19,8 @@ SoulKowo = {
         password: 'p4s5w0rD',
         remember: false,
         status: 1, //STATUS.DISCONNECTED,
+        connectionRetryTime: 1,
+        connectionRetry: null,
     },
 
     auth_props: {
@@ -51,7 +53,7 @@ SoulKowo = {
             SoulKowo.user.status = SoulKowo.STATUS.DISCONNECTED;
             if (SoulKowo.ui) {
                 SoulKowo.ui.error('Couldn\'t login');
-                SoulKowo.ui.showContactList(false);
+                SoulKowo.ui.showContactList(true);
             }
         }
     },
@@ -80,7 +82,7 @@ SoulKowo = {
             else
                 console.error('rep command not found', data);
         },
-        who: function(data) { // doctor
+        who: function(data) {
 
         },
         user_cmd: function(data) { // mxbo bigmac frites coca
@@ -97,17 +99,40 @@ SoulKowo = {
         },
     },
 
+    initConnectionCheck: function() {
+        window.setTimeout(SoulKowo.initConnectionCheck, 10000);
+        if (SoulKowo.socket && SoulKowo.socket.isConnected) {
+            SoulKowo.commands.ping(["10"]);
+        }
+    },
+
+    connectionCheck: function(data, cb) {
+        if (SoulKowo.user.status == SoulKowo.STATUS.CONNECTED) {
+            if (SoulKowo.socket.isConnected && data.bytesWritten > 0) {
+                if (typeof cb == 'function')
+                    cb(true, data);
+                return;
+            } else {
+                SoulKowo.disconnect(false);
+            }
+        }
+        if (typeof cb == 'function')
+            cb(false, data);
+    },
+
     connected: function() {
         SoulKowo.user.status = SoulKowo.STATUS.CONNECTED;
+        SoulKowo.user.connectionRetryTime = 1;
+        window.clearTimeout(SoulKowo.user.connectionRetry);
         if (SoulKowo.ui) {
             SoulKowo.ui.showContactList(true);
             SoulKowo.ui.notice('User logged');
         }
 
         if (SoulKowo.user.remember) {
-            chrome.storage.local.set({'remember': true, 'login': SoulKowo.user.login, 'password': SoulKowo.user.password}, function () {});
+            chrome.storage.local.set({'remember': true, 'login': SoulKowo.user.login, 'password': SoulKowo.user.password});
         } else {
-            SoulKowo.disconnect(true);
+            chrome.storage.local.set({'remember': false, 'login': 'exampl_e', 'password': 'p4s5w0rD'});
         }
     },
 
@@ -128,8 +153,10 @@ SoulKowo = {
             console.error('Command not found');
     },
 
-    sendMessage: function(data) {
-        SoulKowo.socket.sendMessage(data);
+    sendMessage: function(data, cb) {
+        SoulKowo.socket.sendMessage(data, function(data) {
+            SoulKowo.connectionCheck(data, cb);
+        });
         console.log('>>', data);
     },
 
@@ -137,19 +164,38 @@ SoulKowo = {
         SoulKowo.user.login = login;
         SoulKowo.user.password = password;
         SoulKowo.user.remember = remember;
-        SoulKowo.socket.connect();
+        SoulKowo.socketConnection();
+    },
+
+    socketConnection: function() {
+        clearTimeout(SoulKowo.user.connectionRetry);
+        SoulKowo.socket.connect(function(resultCode) {
+            if (resultCode < 0) {
+                SoulKowo.disconnect(false);
+            }
+        });
     },
 
     disconnect: function(clearCredentials) {
         SoulKowo.socket.disconnect();
-        SoulKowo.user.login = 'exampl_e';
-        SoulKowo.user.password = 'p4s5w0rD';
-        SoulKowo.user.remember = false;
+        SoulKowo.socket.isConnected = false;
+        SoulKowo.user.status = SoulKowo.STATUS.DISCONNECTED;
+        if (clearCredentials) {
+            SoulKowo.user.login = 'exampl_e';
+            SoulKowo.user.password = 'p4s5w0rD';
+            SoulKowo.user.remember = false;
 
-        if (clearCredentials == true) {
-            chrome.storage.local.set({'remember': false, 'login': 'exampl_e', 'password': 'p4s5w0rD'}, function () {});
+            chrome.storage.local.set({'remember': false, 'login': 'exampl_e', 'password': 'p4s5w0rD'});
+        } else {
+            SoulKowo.user.connectionRetryTime *= 2;
+            if (SoulKowo.ui) {
+                SoulKowo.ui.error('Connection error. Retrying in ' + SoulKowo.user.connectionRetryTime + ' seconds');
+            }
+            SoulKowo.user.connectionRetry = setTimeout(SoulKowo.socketConnection, SoulKowo.user.connectionRetryTime * 1000);
         }
-        SoulKowo.ui.showContactList(false);
+        if (SoulKowo.ui) {
+            SoulKowo.ui.showContactList(false);
+        }
     },
 
     setUi: function(ui) {
@@ -164,13 +210,14 @@ SoulKowo = {
         SoulKowo.socket = new TcpClient(SoulKowo.server_props.server, SoulKowo.server_props.port);
         SoulKowo.socket.addResponseListener(SoulKowo.responseListener);
         chrome.app.runtime.onLaunched.addListener(SoulKowo.showChatWindow);
+        SoulKowo.initConnectionCheck();
 
         chrome.storage.local.get(['remember', 'login', 'password'], function(data) {
             if (data.remember && data.login && data.password) {
                 SoulKowo.user.remember = true;
                 SoulKowo.user.login = data.login;
                 SoulKowo.user.password = data.password;
-                SoulKowo.socket.connect();
+                SoulKowo.socketConnection();
             }
         });
     },

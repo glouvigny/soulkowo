@@ -134,7 +134,7 @@ Edited by: Tuxkowo (ohai@tuxkowo.fr)
 
     if (this.callbacks.connect) {
       console.log('connect complete');
-      this.callbacks.connect();
+      this.callbacks.connect(resultCode);
     }
     log('onConnectComplete');
   };

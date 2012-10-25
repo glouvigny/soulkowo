@@ -9,41 +9,46 @@
     <link href="../styles/soulkowo.css" rel="stylesheet"/>
 </head>
 <body>
-<div id="notice" class="alert hide">
+<div id="notice" class="alert smooth-hide">
     <span id="notice-dismiss" class="close">×</span>
     <span id="notice-msg">Sample shit</span>
 </div>
 <div id="contents">
-<form class="container" id="login-form">
+<form id="login-form">
   <legend>SoulKowo - Login</legend>
     <div>
       <input type="text" id="login-login" placeholder="Login">
     </div>
     <div>
-      <input type="password" id="login-password" placeholder="Password">
+      <input type="password" id="login-password" placeholder="Socks password">
     </div>
     <div>
-      <label class="checkbox">
-        <input id="login-remember" type="checkbox"> Remember me
+      <label class="checkbox pull-right">
+        <input id="login-remember" type="checkbox"> Autologin
       </label>
-      <button id="login-connect" class="btn btn-primary pull-left">Sign in</button>
+      <button id="login-connect" class="btn btn-primary">Sign in</button>
     </div>
   </div>
 </form>
-<div class="container hide" id="contact-list">
-    <div class="navbar navbar-inverse navbar-fixed-top">
+<div id="contact-list" class="hide">
+    <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <ul class="nav">
               <li><a href="#" id="add-contact"><i class="icon-book"></i> Add contact</a></li>
+            </ul>
+            <ul class="nav pull-right">
               <li><a href="#" id="disconnect"><i class="icon-remove-sign"></i> Log out</a></li>
             </ul>
         </div>
     </div>
-    <ul id="contact-list">
-        <li class="" id="contact-placeholder">
-            <span id="contact-placeholder-status">O</span> - <span id="contact-placeholder-login">exampl_e</span>
-        </li>
-    </ul>
+
+    <div class="container-fluid">
+        <ul id="contact-list">
+            <li class="" id="contact-placeholder">
+                <span id="contact-placeholder-status">O</span> - <span id="contact-placeholder-login">exampl_e</span>
+            </li>
+        </ul>
+    </div>
 </div>
 </div>
 </body>

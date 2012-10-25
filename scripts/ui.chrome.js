@@ -28,7 +28,7 @@ var SoulKowoUi = {
         if (window == null)
             return;
 
-        Std.addClass(document.querySelector('#notice'), 'hide');
+        Std.addClass(document.querySelector('#notice'), 'smooth-hide');
     },
 
     _noticeDisplay: function(msg, c) {
@@ -36,7 +36,7 @@ var SoulKowoUi = {
             return;
 
         var e = document.querySelector('#notice');
-        Std.removeClass(e, 'hide');
+        Std.removeClass(e, 'smooth-hide');
         Std.removeClass(e, 'alert-error');
         Std.removeClass(e, 'alert-info');
         Std.addClass(e, c);
