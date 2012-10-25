@@ -33,21 +33,21 @@ var SoulKowoUi = {
     },
 
     _noticeHide: function() {
-        if (window == null)
+        if (!SoulKowoUi.alive())
             return;
 
         Std.addClass(document.querySelector('#notice'), 'smooth-hide');
     },
 
-    _noticeDisplay: function(msg, c) {
-        if (window == null)
+    notification: function(level, msg) {
+        if (!SoulKowoUi.alive())
             return;
 
         var e = document.querySelector('#notice');
         Std.removeClass(e, 'smooth-hide');
         Std.removeClass(e, 'alert-error');
         Std.removeClass(e, 'alert-info');
-        Std.addClass(e, c);
+        Std.addClass(e, 'alert-' + level);
         document.querySelector('#notice-msg').innerText = msg;
         window.setTimeout(SoulKowoUi._noticeHide, 4200);
     },
@@ -61,7 +61,7 @@ var SoulKowoUi = {
     },
 
     showContactList: function(enabled) {
-        if (window == null)
+        if (!SoulKowoUi.alive())
             return;
 
         var shown = enabled ? "#contact-list" : "#login-form";
@@ -71,13 +71,9 @@ var SoulKowoUi = {
         Std.addClass(document.querySelector(hidden), 'hide');
     },
 
-    error: function(msg) {
-        SoulKowoUi._noticeDisplay(msg, 'alert-error');
-    },
-
-    notice: function(msg) {
-        SoulKowoUi._noticeDisplay(msg, 'alert-info');
-    },
+    alive: function(msg) {
+        return window !== null;
+    }
 }
 
 SoulKowoUi.init();

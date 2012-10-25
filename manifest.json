@@ -20,7 +20,8 @@
             ]
         },
         "background",
-        "storage"
+        "storage",
+        "notifications"
     ],
     "manifest_version": 2
 }

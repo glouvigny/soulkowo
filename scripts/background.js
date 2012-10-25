@@ -51,8 +51,8 @@ SoulKowo = {
         },
         '033': function(data) {
             SoulKowo.user.status = SoulKowo.STATUS.DISCONNECTED;
+            SoulKowo.notification('error', 'Couldn\'t login');
             if (SoulKowo.ui) {
-                SoulKowo.ui.error('Couldn\'t login');
                 SoulKowo.ui.showContactList(true);
             }
         }
@@ -124,9 +124,9 @@ SoulKowo = {
         SoulKowo.user.status = SoulKowo.STATUS.CONNECTED;
         SoulKowo.user.connectionRetryTime = 1;
         window.clearTimeout(SoulKowo.user.connectionRetry);
+        SoulKowo.notification('info', 'User logged');
         if (SoulKowo.ui) {
             SoulKowo.ui.showContactList(true);
-            SoulKowo.ui.notice('User logged');
         }
 
         if (SoulKowo.user.remember) {
@@ -189,13 +189,39 @@ SoulKowo = {
             clearTimeout(SoulKowo.user.connectionRetry);
         } else {
             SoulKowo.user.connectionRetryTime = Math.min(2 * SoulKowo.user.connectionRetryTime, 60);
-            if (SoulKowo.ui) {
-                SoulKowo.ui.error('Connection error. Retrying in ' + SoulKowo.user.connectionRetryTime + ' seconds');
-            }
+            SoulKowo.notification('error', 'Connection error. Retrying in ' + SoulKowo.user.connectionRetryTime + ' seconds');
             SoulKowo.user.connectionRetry = setTimeout(SoulKowo.socketConnection, SoulKowo.user.connectionRetryTime * 1000);
         }
         if (SoulKowo.ui) {
             SoulKowo.ui.showContactList(false);
+        }
+    },
+
+    _chromeNotification: function(level, msg) {
+        if (level == 'error') {
+            level = 'Error:'
+        } else if (level == 'info') {
+            level = 'Info:'
+        }
+
+        var notification = webkitNotifications.createNotification(null, level, msg);
+        notification.ondisplay = function() {
+            setTimeout(function() {
+                notification.close();
+            }, 3000);
+        };
+        notification.show();
+    },
+
+    notification: function(level, message) {
+        var fct = null;
+        if (SoulKowo.ui && SoulKowo.ui.alive()) {
+            fct = SoulKowo.ui.notification;
+        } else {
+            fct = SoulKowo._chromeNotification;
+        }
+        if (fct != null) {
+            fct(level, message);
         }
     },
 
