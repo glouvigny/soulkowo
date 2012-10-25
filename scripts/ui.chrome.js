@@ -1,6 +1,7 @@
 var SoulKowoUi = {
     init: function() {
         document.querySelector('#login-connect').addEventListener("click", SoulKowoUi._connect);
+        document.querySelector('#login-connect-stop').addEventListener("click", SoulKowoUi._stopConnect);
         document.querySelector('#notice').addEventListener("click", SoulKowoUi._noticeHide);
         document.querySelector('#disconnect').addEventListener("click", SoulKowoUi._disconnect);
         chrome.runtime.getBackgroundPage(function(bg) {
@@ -15,6 +16,13 @@ var SoulKowoUi = {
         var password = document.querySelector('#login-password').value;
         chrome.runtime.getBackgroundPage(function(bg) {
             bg.window.SoulKowo.connect(login, password, remember);
+        });
+    },
+
+    _stopConnect: function(e) {
+        e.preventDefault();
+        chrome.runtime.getBackgroundPage(function(bg) {
+            bg.window.SoulKowo.disconnect(true);
         });
     },
 
