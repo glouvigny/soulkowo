@@ -187,7 +187,7 @@ SoulKowo = {
 
             chrome.storage.local.set({'remember': false, 'login': 'exampl_e', 'password': 'p4s5w0rD'});
         } else {
-            SoulKowo.user.connectionRetryTime *= 2;
+            SoulKowo.user.connectionRetryTime = Math.min(2 * SoulKowo.user.connectionRetryTime, 60);
             if (SoulKowo.ui) {
                 SoulKowo.ui.error('Connection error. Retrying in ' + SoulKowo.user.connectionRetryTime + ' seconds');
             }
