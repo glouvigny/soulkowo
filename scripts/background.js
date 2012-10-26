@@ -259,7 +259,8 @@ SoulKowo = {
         SoulKowo.socket.sendMessage(data, function(data) {
             SoulKowo.connectionCheck(data, cb);
         });
-        console.log('>>', data);
+        if (data.substring(0, 4) !== 'ping')
+            console.log('>>', data);
     },
 
     connect: function(login, password, remember) {
