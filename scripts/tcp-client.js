@@ -133,10 +133,8 @@ Edited by: Tuxkowo (ohai@tuxkowo.fr)
     setInterval(this._periodicallyRead.bind(this), 500);
 
     if (this.callbacks.connect) {
-      console.log('connect complete');
       this.callbacks.connect(resultCode);
     }
-    log('onConnectComplete');
   };
 
   /**
@@ -220,14 +218,12 @@ Edited by: Tuxkowo (ohai@tuxkowo.fr)
    * Wrapper function for logging
    */
   function log(msg) {
-    console.log(msg);
   }
 
   /**
    * Wrapper function for error logging
    */
   function error(msg) {
-    console.error(msg);
   }
 
   exports.TcpClient = TcpClient;

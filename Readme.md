@@ -20,7 +20,7 @@ Features
 * (x) Connection
 * (x) Autologin
 * (x) Autoreconnect
-* ( ) Friendlist
+* (X) Friendlist
 * ( ) Sending messages
 * ( ) Receiving messages
 * ( ) Conversation history

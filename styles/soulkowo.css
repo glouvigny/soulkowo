@@ -1,5 +1,5 @@
-body {
-    padding: 16px;
+#contact-list-container {
+    padding-top: 40px;
 }
 
 #notice {
@@ -10,16 +10,59 @@ body {
     opacity: .75 !important;
     z-index: 1337;
 
-    -webkit-transition-property: opacity; 
+    -webkit-transition-property: opacity, display; 
     -webkit-transition-duration: 0.25s; 
     -webkit-transition-timing-function:ease-out;
 }
 
 #notice.smooth-hide {
     opacity: 0 !important;
+    display: none !important;
 }
 
 #login-form input[type=text], #login-form input[type=password] {
     left: 5px;
     right: 5px;
+}
+
+#contact-list-left, #message-boxes {
+    position: absolute;
+    top: 40px;
+    bottom: 0px;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+}
+
+#contact-list-left {
+    width: 240px;
+    left: 0px;
+}
+
+#contact-list-left .selected {
+    background-color: #dedede;
+    color: #272b30;
+}
+
+#message-boxes {
+    left: 240px;
+    right: 0px;
+}
+
+.contact-messages-box {
+    height: 100%;
+    position: relative;
+}
+
+.contact-messages-box-content {
+    position: absolute;
+    bottom: 0;
+}
+
+.contact-messages-box .form-inline {
+    margin: 0;
+}
+
+.table td {
+    border-top-width: 0px;
 }

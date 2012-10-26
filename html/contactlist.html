@@ -31,24 +31,49 @@
     </div>
   </div>
 </form>
-<div id="contact-list" class="hide">
+<div id="contact-list-container" class="hide">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <ul class="nav">
-              <li><a href="#" id="add-contact"><i class="icon-book"></i> Add contact</a></li>
+              <li>
+                <form class="navbar-form" id="add-contact-form">
+                    <input id="add-contact-login" type="text" class="span2" placeholder="Login">
+                    <input id="add-contact-button" type="button" class="btn btn-primary" value="add"/>
+                </form>
+              </li>
             </ul>
             <ul class="nav pull-right">
               <li><a href="#" id="disconnect"><i class="icon-remove-sign"></i> Log out</a></li>
             </ul>
         </div>
     </div>
-
-    <div class="container-fluid">
-        <ul id="contact-list">
-            <li class="" id="contact-placeholder">
-                <span id="contact-placeholder-status">O</span> - <span id="contact-placeholder-login">exampl_e</span>
-            </li>
-        </ul>
+    <div id="contact-list-left">
+        <table id="contact-list" class="table">
+            <tr id="contact-placeholder" class="hide">
+                <td class="contact-login">exampl_e</td>
+                <td class="contact-status">
+                    <span class="status-actif label label-success hide">On</span>
+                    <span class="status-away label label-warning hide">Away</span>
+                    <span class="status-idle label label-warning hide">Idle</span>
+                    <span class="status-lock label label-important hide">Lock</span>
+                    <span class="status-server label label-info hide">Srv</span>
+                    <span class="status-connection label label-info hide">Cnt</span>
+                </td>
+                <td class="contact-delete pull-right">Delete</td>
+            </tr>
+        </table>
+    </div>
+    <div id="message-boxes">
+        <div id="contact-placeholder-messages" class="contact-messages-box hide">
+            <div class="contact-messages-box-content">
+                <div class="contact-messages">
+                </div>
+                <form class="form-inline">
+                    <input type="text"/>
+                    <input type="submit" class="btn btn-primary" value="send"/>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </div>

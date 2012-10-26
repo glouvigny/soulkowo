@@ -36,6 +36,7 @@ SoulKowo = {
     rep: {
         '002': function(data) {
             if (SoulKowo.user.status == SoulKowo.STATUS.WAITINGFORCONNECTION) {
+                SoulKowo.notification('info', 'Connection to NetSoul');
                 SoulKowo.user.status = SoulKowo.STATUS.CONNECTING;
                 SoulKowo.sendMessage(
                     "ext_user_log " + SoulKowo.user.login + " " +
@@ -56,6 +57,95 @@ SoulKowo = {
                 SoulKowo.ui.showContactList(true);
             }
         }
+    },
+
+    contactList: {
+        contacts: {},
+        addContact: function(login) {
+            login = login.trim();
+            if (SoulKowo.contactList.contacts[login] !== undefined)
+                return;
+
+            SoulKowo.contactList.contacts[login] = 'none';
+            SoulKowo.contactList.updateContact();
+            SoulKowo.notification('info', login + ' has been added to the contact list');
+            if (SoulKowo.ui) {
+                SoulKowo.ui.addContact(login);
+            }
+        },
+        removeContact: function(login) {
+            login = login.trim();
+            if (SoulKowo.contactList.contacts[login] === undefined)
+                return;
+
+            delete SoulKowo.contactList.contacts[login];
+            SoulKowo.contactList.updateContact();
+            SoulKowo.notification('info', login + ' has been removed from the contact list');
+            if (SoulKowo.ui) {
+                SoulKowo.ui.removeContact(login);
+            }
+        },
+        updateContact: function() {
+            chrome.storage.local.set({'contacts': SoulKowo.contactList.contacts});
+            SoulKowo.contactList.watchlog();
+        },
+        setStatus: function(login, status) {
+            if (SoulKowo.contactList.contacts[login] === undefined)
+                return;
+
+            SoulKowo.contactList.contacts[login] = status;
+            if (SoulKowo.ui) {
+                SoulKowo.ui.user_status(login, status);
+            }
+        },
+        watchlog: function() {
+            var userlist = [];
+            for (user in SoulKowo.contactList.contacts)
+                userlist.push(user);
+            SoulKowo.sendMessage("user_cmd watch_log_user {" + userlist.join(',') + "}");
+            SoulKowo.sendMessage("user_cmd who {" + userlist.join(',') + "}");
+        },
+    },
+
+    messaging: {
+        history: {},
+        addHistory: function(incoming, login, msg) {
+            var time = new Date();
+            if (!SoulKowo.messaging.history[login]) {
+                SoulKowo.messaging.history[login] = [];
+            }
+            SoulKowo.messaging.history[login].push({incoming: incoming, time: time, msg: msg});
+        },
+        recvMessage: function(login, msg) {
+            SoulKowo.messaging.addHistory(true, unescape(login), unescape(msg));
+        },
+        sendMessage: function(login, msg) {
+            SoulKowo.messaging.addHistory(false, login, msg);
+            SoulKowo.sendMessage('user_cmd msg_user ' + escape(login) + ' msg ' + escape(msg));
+        },
+    },
+
+    user_cmds: {
+        msg: function(login, data) {
+            if (data[3])
+                SoulKowo.messaging.recvMessage(login, data[3]);
+        },
+        logout: function(login, data) {
+            SoulKowo.contactList.setStatus(login, 'none');
+        },
+        login: function(login, data) {
+            SoulKowo.contactList.setStatus(login, 'actif');
+        },
+        state: function(login, data) {
+            if (data[3])
+                SoulKowo.contactList.setStatus(login, data[3].split(':')[0]);
+        },
+        who: function(login, data) {
+            if (data.length < 15 || data[4] == '002')
+                return;
+
+            SoulKowo.contactList.setStatus(data[4], data[13].split(':')[0]);
+        },
     },
 
     commands: {
@@ -86,15 +176,19 @@ SoulKowo = {
 
         },
         user_cmd: function(data) { // mxbo bigmac frites coca
-
+            if (data.length < 5)
+                return;
+            var user_info = data[0].split(':')
+            if (user_info.length > 6) {
+                var user_cred = user_info[3].split('@');
+                if (user_cred.length > 1) {
+                    if (SoulKowo.user_cmds[data[2]]) {
+                        return SoulKowo.user_cmds[data[2]](user_cred[0], data);
+                    }
+                }
+            }
         },
         state: function(data) {
-
-        },
-        dotnetSoul_UserTyping: function(data) {
-
-        },
-        dotnetSoul_UserCancelledTyping: function(data) {
 
         },
     },
@@ -123,6 +217,7 @@ SoulKowo = {
     connected: function() {
         SoulKowo.user.status = SoulKowo.STATUS.CONNECTED;
         SoulKowo.user.connectionRetryTime = 1;
+        SoulKowo.contactList.watchlog();
         window.clearTimeout(SoulKowo.user.connectionRetry);
         SoulKowo.notification('info', 'User logged');
         if (SoulKowo.ui) {
@@ -138,19 +233,26 @@ SoulKowo = {
 
     showChatWindow: function() {
         chrome.app.window.create('html/contactlist.html', {
-            'defaultWidth': 400,
+            'defaultWidth': 720,
+            'minWidth': 720,
             'defaultHeight': 500,
             'type': 'shell',
         });
     },
 
-    responseListener: function(data) {
-        console.log('<<', data);
-        data = data.split(' ');
-        if (SoulKowo.commands[data[0]])
-            SoulKowo.commands[data.shift()](data);
-        else
-            console.error('Command not found');
+    responseListener: function(raw) {
+
+        raw = raw.split('\n');
+        for (i in raw) {
+            console.log('<<', raw[i]);
+            data = raw[i].split(' ');
+            if (raw[i] && data.length > 0) {
+                if (SoulKowo.commands[data[0]])
+                    SoulKowo.commands[data.shift()](data);
+                else
+                    console.error('Command not found');
+            }
+        }
     },
 
     sendMessage: function(data, cb) {
@@ -230,6 +332,9 @@ SoulKowo = {
 
         if (SoulKowo.user.status == SoulKowo.STATUS.CONNECTED) {
             ui.showContactList(true);
+            for (login in SoulKowo.contactList.contacts) {
+                SoulKowo.ui.user_status(login, SoulKowo.contactList.contacts[login]);
+            }
         }
     },
 
@@ -239,12 +344,15 @@ SoulKowo = {
         chrome.app.runtime.onLaunched.addListener(SoulKowo.showChatWindow);
         SoulKowo.initConnectionCheck();
 
-        chrome.storage.local.get(['remember', 'login', 'password'], function(data) {
+        chrome.storage.local.get(['remember', 'login', 'password', 'contacts'], function(data) {
             if (data.remember && data.login && data.password) {
                 SoulKowo.user.remember = true;
                 SoulKowo.user.login = data.login;
                 SoulKowo.user.password = data.password;
                 SoulKowo.socketConnection();
+            }
+            if (data.contacts) {
+                SoulKowo.contactList.contacts = data.contacts;
             }
         });
     },
