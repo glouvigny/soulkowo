@@ -74,9 +74,10 @@ var SoulKowoUi = {
         }
 
         var conv = document.querySelector('#' + login + '-messages');
-        var login = document.querySelector('#' + login);
+        var login_line = document.querySelector('#' + login);
         Std.removeClass(conv, 'hide');
-        Std.addClass(login, 'selected');
+        Std.addClass(login_line, 'selected');
+        SoulKowoUi.messagesUpdate(login);
     },
 
     _sendMessage: function(e) {
@@ -137,6 +138,21 @@ var SoulKowoUi = {
         if (!login)
             return;
 
+        var user_line = document.querySelector('#' + login);
+        if (!user_line) {
+            SoulKowoUi.addContact(login);
+            return SoulKowoUi.messagesUpdate(login);
+        } 
+
+        var counter = user_line.querySelector('.unread_count');
+        if (!Std.hasClass(user_line, 'selected')) {
+            counter.innerText = parseInt(counter.innerText) + 1;
+            Std.removeClass(counter, 'hide');
+        } else {
+            counter.innerText = 0;
+            Std.addClass(counter, 'hide');
+        }
+
         chrome.runtime.getBackgroundPage(function(bg) {
             if (!bg.window.SoulKowo.messaging.history[login])
                 return;
@@ -181,10 +197,6 @@ var SoulKowoUi = {
         var status_label = user.querySelector('.status-' + status);
         if (status_label)
             Std.removeClass(status_label, 'hide');
-    },
-
-    user_message: function(login, msg) {
-
     },
 
     showContactList: function(enabled) {
