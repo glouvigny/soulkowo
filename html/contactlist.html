@@ -34,20 +34,16 @@
 <div id="contact-list-container" class="hide">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <ul class="nav">
-              <li>
-                <form class="navbar-form" id="add-contact-form">
-                    <input id="add-contact-login" type="text" class="span2" placeholder="Login">
-                    <input id="add-contact-button" type="button" class="btn btn-primary" value="add"/>
-                </form>
-              </li>
-            </ul>
             <ul class="nav pull-right">
               <li><a href="#" id="disconnect"><i class="icon-remove-sign"></i> Log out</a></li>
             </ul>
         </div>
     </div>
     <div id="contact-list-left">
+        <form class="inline-form" id="add-contact-form">
+            <input id="add-contact-login" type="text" class="span2" placeholder="Login">
+            <input id="add-contact-button" type="button" class="btn btn-primary" value="add"/>
+        </form>
         <table id="contact-list" class="table">
             <tr id="contact-placeholder" class="hide">
                 <td class="contact-login">exampl_e</td>
@@ -66,10 +62,11 @@
     <div id="message-boxes">
         <div id="contact-placeholder-messages" class="contact-messages-box hide">
             <div class="contact-messages-box-content">
-                <div class="contact-messages">
-                </div>
-                <form class="form-inline">
-                    <input type="text"/>
+                <ul class="contact_messages">
+                </ul>
+                <form class="form-inline send-messages">
+                    <input type="text" class="form_user_msg" name="msg"/>
+                    <input type="hidden" class="form_user_login" value="exampl_e"/>
                     <input type="submit" class="btn btn-primary" value="send"/>
                 </form>
             </div>
@@ -77,5 +74,11 @@
     </div>
 </div>
 </div>
+<ul class="hide">
+    <li id="im-template" class="im">
+        <i><small class="timestamp muted"></small></i>
+        <div class="message"></div>
+    </li>
+</ul>
 </body>
 </html>

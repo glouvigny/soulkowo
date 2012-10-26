@@ -1,10 +1,9 @@
 SoulKowo = {
     STATUS: {
         DISCONNECTED: 1,
-        SOCKETOK: 2,
-        WAITINGFORCONNECTION: 3,
-        CONNECTING: 4,
-        CONNECTED: 5
+        WAITINGFORCONNECTION: 2,
+        CONNECTING: 3,
+        CONNECTED: 4,
     },
 
     server_props: {
@@ -14,7 +13,7 @@ SoulKowo = {
 
     user: {
         location: 'Uranus',
-        client: 'SoulKowo 0.5',
+        client: 'SoulKowo - NetSoul in Chrome: http://llau.me/2B',
         login: 'exampl_e',
         password: 'p4s5w0rD',
         remember: false,
@@ -115,6 +114,7 @@ SoulKowo = {
                 SoulKowo.messaging.history[login] = [];
             }
             SoulKowo.messaging.history[login].push({incoming: incoming, time: time, msg: msg});
+            SoulKowo.ui.messagesUpdate(login);
         },
         recvMessage: function(login, msg) {
             SoulKowo.messaging.addHistory(true, unescape(login), unescape(msg));
@@ -217,6 +217,7 @@ SoulKowo = {
     connected: function() {
         SoulKowo.user.status = SoulKowo.STATUS.CONNECTED;
         SoulKowo.user.connectionRetryTime = 1;
+        SoulKowo.sendMessage("state actif");
         SoulKowo.contactList.watchlog();
         window.clearTimeout(SoulKowo.user.connectionRetry);
         SoulKowo.notification('info', 'User logged');
@@ -244,13 +245,15 @@ SoulKowo = {
 
         raw = raw.split('\n');
         for (i in raw) {
-            console.log('<<', raw[i]);
-            data = raw[i].split(' ');
-            if (raw[i] && data.length > 0) {
-                if (SoulKowo.commands[data[0]])
-                    SoulKowo.commands[data.shift()](data);
-                else
-                    console.error('Command not found');
+            if (raw[i].trim()) {
+                console.log('<<', raw[i]);
+                data = raw[i].split(' ');
+                if (raw[i] && data.length > 0) {
+                    if (SoulKowo.commands[data[0]])
+                        SoulKowo.commands[data.shift()](data);
+                    else
+                        console.error('Command not found');
+                }
             }
         }
     },
@@ -334,6 +337,7 @@ SoulKowo = {
         if (SoulKowo.user.status == SoulKowo.STATUS.CONNECTED) {
             ui.showContactList(true);
             for (login in SoulKowo.contactList.contacts) {
+                SoulKowo.ui.addContact(login);
                 SoulKowo.ui.user_status(login, SoulKowo.contactList.contacts[login]);
             }
         }

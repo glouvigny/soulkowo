@@ -79,6 +79,16 @@ var SoulKowoUi = {
         Std.addClass(login, 'selected');
     },
 
+    _sendMessage: function(e) {
+        e.preventDefault();
+        var msg = e.target.querySelector('.form_user_msg').value;
+        var login = e.target.querySelector('.form_user_login').value;
+        chrome.runtime.getBackgroundPage(function(bg) {
+            bg.window.SoulKowo.messaging.sendMessage(login, msg);
+            e.target.querySelector('.form_user_msg').value = '';
+        });
+    },
+
     notification: function(level, msg) {
         if (!SoulKowoUi.alive())
             return;
@@ -106,6 +116,8 @@ var SoulKowoUi = {
 
         var new_contact_messages = document.querySelector('#contact-placeholder-messages').cloneNode(true);
         new_contact_messages.id = login + '-messages';
+        new_contact_messages.querySelector('.form_user_login').value = login;
+        new_contact_messages.querySelector('.send-messages').addEventListener("submit", SoulKowoUi._sendMessage);
         document.querySelector('#message-boxes').appendChild(new_contact_messages);
     },
 
@@ -119,6 +131,41 @@ var SoulKowoUi = {
             return;
         document.querySelector('#contact-list').removeChild(elt);
         document.querySelector('#contact-list').removeChild(elt2);
+    },
+
+    messagesUpdate: function(login) {
+        if (!login)
+            return;
+
+        chrome.runtime.getBackgroundPage(function(bg) {
+            if (!bg.window.SoulKowo.messaging.history[login])
+                return;
+
+            var list = document.querySelector('#' + login + '-messages .contact_messages');
+            if (!list)
+                return;
+
+            if (list.hasChildNodes()) {
+                while (list.childNodes.length >= 1) {
+                    list.removeChild(list.firstChild);       
+                } 
+            }
+
+            for (i in bg.window.SoulKowo.messaging.history[login]) {
+                var mess = bg.window.SoulKowo.messaging.history[login][i];
+                var mess_template = document.querySelector('#im-template').cloneNode(true);
+                mess_template.querySelector('.message').innerText = mess.msg;
+                mess_template.querySelector('.timestamp').innerText = mess.time.toLocaleTimeString();
+                if (mess.incoming == false) {
+                    Std.addClass(mess_template, 'myself');
+                } else {
+                    Std.removeClass(mess_template, 'myself');
+                }
+                console.log(mess_template);
+                list.appendChild(mess_template);
+            }
+            document.querySelector('#message-boxes').scrollTop = document.querySelector('#message-boxes').scrollHeight;
+        });
     },
 
     user_status: function(login, status) {

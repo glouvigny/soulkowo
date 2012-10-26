@@ -21,6 +21,6 @@ Features
 * (x) Autologin
 * (x) Autoreconnect
 * (X) Friendlist
-* ( ) Sending messages
-* ( ) Receiving messages
-* ( ) Conversation history
+* (X) Sending messages
+* (X) Receiving messages
+* ( ) Alerts on incoming messages

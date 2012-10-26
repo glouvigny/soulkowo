@@ -50,13 +50,15 @@
 }
 
 .contact-messages-box {
-    height: 100%;
+    width: 100%;
     position: relative;
 }
 
 .contact-messages-box-content {
     position: absolute;
+    top: 0;
     bottom: 0;
+    right: 0;
 }
 
 .contact-messages-box .form-inline {
@@ -65,4 +67,20 @@
 
 .table td {
     border-top-width: 0px;
+}
+
+.myself {
+    text-align: right;
+}
+
+ul {
+    margin-left: 0px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.timestamp {
+    display: block;
 }
