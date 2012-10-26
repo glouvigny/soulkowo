@@ -130,7 +130,7 @@ var SoulKowoUi = {
         if (!elt && !elt2)
             return;
         document.querySelector('#contact-list').removeChild(elt);
-        document.querySelector('#contact-list').removeChild(elt2);
+        document.querySelector('#message-boxes').removeChild(elt2);
     },
 
     messagesUpdate: function(login) {
