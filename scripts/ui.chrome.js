@@ -180,7 +180,7 @@ var SoulKowoUi = {
                 console.log(mess_template);
                 list.appendChild(mess_template);
             }
-            document.querySelector('#message-boxes').scrollTop = document.querySelector('#message-boxes').scrollHeight;
+            list.scrollTop = list.scrollHeight;
         });
     },
 
