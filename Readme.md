@@ -6,7 +6,7 @@ About Netsoul
 
 SoulKowo is a NetSoul client for Chrome and Chrome OS.
 
-Net Soul is an Instant messaging protocol used in Ionis Institute of
+NetSoul is an Instant messaging protocol used in Ionis Institute of
 Technology (IIT) schools such as Epitech, Epita, Eart-sup, SupInternet,
 ETNA, Supbiotech or IPSA.
 
