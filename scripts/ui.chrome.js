@@ -62,7 +62,6 @@ var SoulKowoUi = {
         var login = e.target.parentNode.id;
         if (!login)
             return;
-        console.log(e);
         var convs = document.querySelectorAll('.contact-messages-box');
         for (i in convs) {
             Std.addClass(convs[i], 'hide');
@@ -90,7 +89,7 @@ var SoulKowoUi = {
         });
     },
 
-    notification: function(level, msg) {
+    notification: function(level, action, msg) {
         if (!SoulKowoUi.alive())
             return;
 
@@ -177,7 +176,6 @@ var SoulKowoUi = {
                 } else {
                     Std.removeClass(mess_template, 'myself');
                 }
-                console.log(mess_template);
                 list.appendChild(mess_template);
             }
             list.scrollTop = list.scrollHeight;

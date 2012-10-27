@@ -8,6 +8,9 @@
             "scripts": [
                 "scripts/std.js",
                 "scripts/tcp-client.js",
+                "scripts/persistent.js",
+                "scripts/launcher.js",
+                "scripts/notifications.js",
                 "scripts/background.js"
             ]
         }
