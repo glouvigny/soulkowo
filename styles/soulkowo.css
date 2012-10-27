@@ -84,15 +84,67 @@
     position: fixed;
     top: 40px;
     overflow: auto;
-    bottom: 21px;
+    bottom: 27px;
     left: 244px;
     right: 0px;
 }
 
 .contact_messages li {
     list-style-type: none;
+    padding-right: 4px;
+}
+
+
+.contact_messages li {
+    position: relative;
+    padding: 7px;
+    margin-right: 4px;
+    margin: 14px 4px 14px 0;
+    color: #fff;
+    background: #073678;
+}
+
+.contact_messages li.myself {
+    background: #075816;
+}
+
+
+.contact_messages li:after {
+    content:"";
+    position:absolute;
+    border-style:solid;
+    /* reduce the damage in FF3.0 */
+    display:block; 
+    width:0;
+    top:-10px; /* value = - border-top-width - border-bottom-width */
+    right:25px; /* controls horizontal position */
+    border-width:10px 10px 0 0; /* vary these values to change the angle of the vertex */
+    border-color:transparent #073678; 
+}
+
+.contact_messages li.myself:after {
+    bottom:-10px; /* value = - border-top-width - border-bottom-width */
+    left:25px; /* controls horizontal position */
+    border-width:10px 0 0 10px; /* vary these values to change the angle of the vertex */
+    border-color:#075816 transparent; 
+    top:auto;
+    right:auto;
 }
 
 .timestamp {
     display: block;
+}
+
+.form_user_msg {
+    position: fixed;
+    bottom: 4px;
+    left: 244px;
+    right: 4px;
+    width: auto !important;
+}
+
+#add-contact-form input {
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 4px;
 }

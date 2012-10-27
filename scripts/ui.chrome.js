@@ -171,7 +171,7 @@ var SoulKowoUi = {
                 var mess = bg.window.SoulKowo.messaging.history[login][i];
                 var mess_template = document.querySelector('#im-template').cloneNode(true);
                 mess_template.querySelector('.message').innerText = mess.msg;
-                mess_template.querySelector('.timestamp').innerText = mess.time.toLocaleTimeString();
+                mess_template.querySelector('.timestamp').innerText = login + ' @ ' + mess.time.toLocaleTimeString() + ':';
                 if (mess.incoming == false) {
                     Std.addClass(mess_template, 'myself');
                 } else {
