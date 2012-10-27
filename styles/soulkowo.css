@@ -101,11 +101,11 @@
     margin-right: 4px;
     margin: 14px 4px 14px 0;
     color: #fff;
-    background: #073678;
+    background: #3a87ad;
 }
 
 .contact_messages li.myself {
-    background: #075816;
+    background: #468847;
 }
 
 
@@ -119,14 +119,14 @@
     top:-10px; /* value = - border-top-width - border-bottom-width */
     right:25px; /* controls horizontal position */
     border-width:10px 10px 0 0; /* vary these values to change the angle of the vertex */
-    border-color:transparent #073678; 
+    border-color:transparent #3a87ad; 
 }
 
 .contact_messages li.myself:after {
     bottom:-10px; /* value = - border-top-width - border-bottom-width */
     left:25px; /* controls horizontal position */
     border-width:10px 0 0 10px; /* vary these values to change the angle of the vertex */
-    border-color:#075816 transparent; 
+    border-color:#468847 transparent; 
     top:auto;
     right:auto;
 }

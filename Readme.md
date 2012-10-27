@@ -23,4 +23,4 @@ Features
 * (X) Friendlist
 * (X) Sending messages
 * (X) Receiving messages
-* ( ) Alerts on incoming messages
+* (#) Alerts on incoming messages
